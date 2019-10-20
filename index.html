@@ -1,73 +1,9 @@
 <html>
     <head>
-
     </head>
+
     <body>
-      <div id ='price'></div>
-      <div id ='groupCompanies'></div>
-      <div id ='state'></div>
-      <div id ='folow'></div>
-      <div id ='cool'></div>
     </body>
-    <script>
-    
-    let priceNum = document.querySelector('#price')
-    let groupCompany = document.querySelector('#groupCompanies')
 
-    let companies = 'https://acme-users-api-rev.herokuapp.com/api/companies'
-    let product = 'https://acme-users-api-rev.herokuapp.com/api/products'
-    let offerings = 'https://acme-users-api-rev.herokuapp.com/api/offerings'
-
-    //-------------------------------------------------------------------------
-    // Price Range
-    
-    const findProductInPriceRange = (url , obj) => new Promise((res, rej) => {
-      // can change url to /api/products, /api/offerings for the other ones
-     
-    window.fetch(url)
-              .then(response => response.json())
-              .then( data => {
-                const html =  data.map(priceHTML => {
-                  if(obj.min < priceHTML.suggestedPrice && obj.max > priceHTML.suggestedPrice){
-                      return `<li>${priceHTML.name}</li>`
-                  }
-                }).join('')
-                priceNum.innerHTML = html
-              })
-              .catch(e => rej(e));
-
-    })
-
-    let ProductInPriceRange = () => findProductInPriceRange(product , {min: 1, max: 5})
-    ProductInPriceRange()
-
-     //-------------------------------------------------------------------------
-    // Company Group
-
-    const groupCompaniesByLetter = (company) => new Promise((res, rej) => {
-      // can change url to /api/products, /api/offerings for the other ones
-     
-    window.fetch(company)
-              .then(response => response.json())
-              .then( data => {
-                let companyLetterValue = ''
-                let companyArray = ''
-                const html =  data.map( companyName => { 
-           
-                companyLetterValue = companyName.name[0] + ' : ' 
-                companyArray = companyName
-                  
-                return `${console.log(companyLetterValue, companyArray)}`
-                }).join('')
-
-
-              })
-              .catch(e => rej(e));
-
-    })
-
-    let groupedCompaniesByLetter = () => groupCompaniesByLetter(companies)
-    groupedCompaniesByLetter()
-
-    </script>
+    <script src="api.js"></script>
 </html>

@@ -165,25 +165,40 @@
         console.log('ProcessedProduct')
         let productRange = data[0]
         let offersRange = data[1]
+        let productObj = {}
+        let itemObj = {}
+
 
       
         return offersRange.then( offerData => {
-           offerData.reduce((accum, productid) => {
-            if(!productid.productId in accum) {
-                accum[productid.productId['total']] = productid.price
-                accum[productid.productId['counter']] = 1;
-            } else {
-                accum[productid.productId['total']] += productid.price;
-                accum[productid.productId['counter']]++;
-            }
-            return accum
-        }, {})
+        offerData.filter( offerElement => {
 
-            Object.entries(productid.productId).map(productData => {
-                console.log({ product: products.find(id === productData.productId), averagePrice: (productData.productId.total / productData.productId.count)})
-            })
+        if(!productObj[offerElement.productId]) {
+            productObj[offerElement.productId] = { 'name': offerElement.productId, 'total': offerElement.price,  'counter': 1}
+        }
+        else {
+            productObj[offerElement.productId].total += offerElement.price;
+            productObj[offerElement.productId].counter++;   
+        }
+        let counter = 0
+            
+        productRange.then( productData => {
+            productData.filter( productElement => {
+                if(!itemObj[productElement.id]){
+                    itemObj[productElement.id] = { 'name': productElement.name, 'product': productElement.id, 'average': 0}
+                    counter++
+                }
+                if(itemObj[productElement.id].product.includes(productObj[offerElement.productId].name)){
+                    itemObj[productElement.id].average = productObj[offerElement.productId].total / productObj[offerElement.productId].counter
+                }
+                else if(counter === 1){
+                    console.log({'product':itemObj})
+                }
+            })    
+        })        
         })
-      })
+    })   
+    })
       .catch(e => rej(e))
     })
 
